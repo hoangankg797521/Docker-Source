@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <title>WireGuard VPN</title>
+  <link rel="stylesheet" href="/app.css?v=20261019-client-card-1">
+  <script defer src="/app.js?v=20261019-client-card-1"></script>
+  <script defer src="/acl.js?v=20261019-client-card-1"></script>
+</head>
+<body>
+  <div id="login-shell" class="login-shell">
+    <div class="login-card">
+      <div class="brand-mark large"><img src="/logo.png" alt="" class="wg-logo"></div>
+      <p class="eyebrow">REMOTE ACCESS VPN</p>
+      <h1>WireGuard</h1>
+      <p class="login-copy">Đăng nhập bằng tài khoản quản trị wg-easy để xem trạng thái VPN.</p>
+      <form id="login-form" autocomplete="on">
+        <label for="username">Tên đăng nhập</label>
+        <input id="username" name="username" autocomplete="username" required>
+        <label for="password">Mật khẩu wg-easy</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="btn primary full" type="submit"><span id="login-submit-label">ĐĂNG NHẬP</span><span id="login-submit-arrow" aria-hidden="true">→</span></button>
+      </form>
+      <p id="login-error" class="form-error" role="alert"></p>
+      <div class="login-note"><span class="dot green"></span><span>Mật khẩu chỉ được giữ trong bộ nhớ phiên; không lưu trong trình duyệt.</span></div>
+      <p class="login-footer">NOC Dashboard · wg-easy <span id="login-version">v15.4.0</span></p>
+    </div>
+  </div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-head">
+        <div class="brand-mark"><img src="/logo.png" alt="" class="wg-logo"></div>
+        <div><strong>WireGuard</strong><small>Remote Access VPN</small></div>
+        <button id="mobile-close" class="icon-btn mobile-close" aria-label="Đóng menu">×</button>
+      </div>
+      <div class="nav-label">QUẢN TRỊ</div>
+      <nav class="side-nav" aria-label="Điều hướng chính">
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">◫</span><span>Tổng quan</span></button>
+        <button class="nav-item" data-page="clients"><span class="nav-icon">♙</span><span>Quản lý Client</span><span id="nav-client-count" class="nav-count">—</span></button>
+        <button class="nav-item" data-page="traffic"><span class="nav-icon">⌁</span><span>Thống kê</span></button>
+        <button class="nav-item" data-page="history"><span class="nav-icon">◷</span><span>Nhật ký kết nối</span></button>
+        <button class="nav-item" data-page="server"><span class="nav-icon">▤</span><span>Thông tin Server</span></button>
+        <div class="nav-label nav-label-spaced">HỆ THỐNG</div>
+        <button class="nav-item" data-page="configuration"><span class="nav-icon">⚙</span><span>Cấu hình</span></button>
+        <button class="nav-item" data-page="tools"><span class="nav-icon">⌘</span><span>Công cụ</span></button>
+        <button class="nav-item" data-page="settings"><span class="nav-icon">◉</span><span>Cài đặt</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-server"><span class="status-pulse"></span><div><strong>VPN Server</strong><small id="sidebar-server">Đang kiểm tra…</small></div></div>
+        <a id="native-ui-link" class="native-link" href="http://localhost:51821" target="_blank" rel="noreferrer"><span>↗</span> Mở giao diện wg-easy</a>
+        <div class="sidebar-footer">Custom by Le Hoang An</div>
+      </div>
+    </aside>
+    <div id="scrim" class="scrim"></div>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left"><button id="menu-toggle" class="icon-btn menu-toggle" aria-label="Mở menu">☰</button><div class="crumb"><span>Hạ tầng</span><span class="crumb-sep">/</span><strong id="page-title">Tổng quan</strong></div></div>
+        <label class="global-search"><span aria-hidden="true">⌕</span><input id="global-search" type="search" placeholder="Tìm Client hoặc IP…" autocomplete="off"></label>
+        <div class="topbar-right">
+          <div class="top-status"><span class="dot green"></span><span id="top-api-label">API Online</span></div>
+          <div class="top-divider"></div>
+          <button id="theme-toggle" class="icon-btn theme-btn" aria-label="Đổi giao diện" title="Đổi giao diện">◐</button>
+          <button id="refresh-btn" class="icon-btn refresh-btn" aria-label="Làm mới dữ liệu" title="Làm mới">↻</button>
+          <div class="user-menu"><span class="avatar">A</span><span class="user-label" id="user-label">Administrator</span><button id="user-menu-btn" class="icon-btn tiny" aria-label="Tài khoản">⌄</button><div id="user-dropdown" class="dropdown hidden"><button id="logout-btn">Đăng xuất</button></div></div>
+        </div>
+      </header>
+      <section class="page-wrap">
+        <div class="page-heading">
+          <div><p class="eyebrow" id="page-kicker">WIREGUARD REMOTE ACCESS</p><h1 id="heading-title">Tổng quan VPN</h1><p id="page-subtitle" class="muted">Giám sát trạng thái và thiết bị VPN.</p></div>
+          <div class="heading-actions"><span class="update-label">Cập nhật <strong id="last-update">—</strong></span><button class="btn primary" id="create-client-btn"><span>＋</span> Tạo Client</button></div>
+        </div>
+        <div id="alert-box" class="alert hidden" role="status"></div>
+        <div id="page-content"></div>
+        <footer class="app-footer"><span>WG-EASY <b id="footer-version">v15.4.0</b> · API <b id="api-status">Chưa xác thực</b></span></footer>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+</body>
+</html>

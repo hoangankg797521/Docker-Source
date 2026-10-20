@@ -1,0 +1,28 @@
+const {readFileSync}=require('node:fs');
+const vm=require('node:vm'),assert=require('node:assert/strict');
+const source=readFileSync(process.argv[2]||'static/acl.js','utf8');
+let response,resolve,fail=false,closed=0;
+const el={dataset:{aclSummary:'2'},innerHTML:''};
+const ctx=vm.createContext({Map,console,closeModal:()=>closed++,toast:()=>{},document:{querySelectorAll:s=>s==='[data-acl-summary]'?[el]:[],querySelector:()=>el},esc:s=>String(s??'').replaceAll('<','&lt;'),api:()=>fail?Promise.reject(Error('API offline')):new Promise(r=>resolve=r)});
+vm.runInContext(source,ctx);
+(async()=>{
+ assert.equal(vm.runInContext("normalizeAclPort('Any')",ctx),'');
+ assert.equal(vm.runInContext("normalizeAclPort(' any ')",ctx),'');
+ assert.equal(vm.runInContext("normalizeAclPort('443')",ctx),'443');
+ assert.equal(vm.runInContext("normalizeAclPort('8000-8080')",ctx),'8000-8080');
+ assert.match(vm.runInContext("aclSummary('2')",ctx),/acl-skeleton/);
+ const first=vm.runInContext('wireAcl()',ctx);
+ resolve({items:[{client:{id:'2'},policy:{mode:'custom'},apply:{status:'applied'}}]});await first;
+ assert.match(el.innerHTML,/Custom ACL/);assert.match(el.innerHTML,/Applied/);
+ const next=vm.runInContext('wireAcl()',ctx);assert.match(el.innerHTML,/Custom ACL/);assert.doesNotMatch(el.innerHTML,/skeleton|Đang đọc/);
+ resolve({items:[{client:{id:'2'},policy:{mode:'deny_all'},apply:{status:'pending'}}]});await next;
+ assert.match(el.innerHTML,/Deny All/);assert.match(el.innerHTML,/Pending/);
+ fail=true;await vm.runInContext('wireAcl()',ctx);assert.match(el.innerHTML,/Deny All/);assert.match(el.innerHTML,/Chưa cập nhật/);
+ assert.match(vm.runInContext("aclSummary('unknown')",ctx),/skeleton/);
+ assert.equal(vm.runInContext("aclStatus({status:'error'})",ctx),'Error');
+ assert.equal(vm.runInContext("aclStatus({status:'drift'})",ctx),'drift');
+ vm.runInContext("wireAcl=()=>{};finishAclSave({policy:{mode:'custom'},apply:{status:'applied'},warnings:[]},'2')",ctx);assert.equal(closed,1);
+ assert.throws(()=>vm.runInContext("finishAclSave({policy:{mode:'custom'},apply:{status:'error',error:'apply failed'}},'2')",ctx),/apply failed/);assert.equal(closed,1);
+ assert.throws(()=>vm.runInContext("finishAclSave({policy:{mode:'custom'},apply:{status:'pending'}},'2')",ctx),/Pending/);assert.equal(closed,1);
+ console.log('PASS: applied closes editor; error/pending keep editor open; neutral initial state, cached refresh, backend status, stale error, no false Allow All');
+})().catch(e=>{console.error(e);process.exitCode=1});

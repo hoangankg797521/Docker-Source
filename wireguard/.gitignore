@@ -1,0 +1,7 @@
+.env
+secrets/
+*.tar
+*.tar.gz
+__pycache__/
+*.pyc
+node_modules/

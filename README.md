@@ -8,6 +8,7 @@ Các gói Docker độc lập; mỗi thư mục có hướng dẫn, cấu hình 
 | [uptime-kuma](uptime-kuma/) | `uptime-kuma:2.5.6` |
 | [meshcentral](meshcentral/) | `meshcentral:1.2.6` |
 | [ipam](ipam/) | `ipam:local` |
+| [wireguard](wireguard/) | `ghcr.io/hoangankg797521/wg-easy:1.0.0`, `wg-noc:1.0.0`, `wg-acl:1.0.0` |
 
 Homepage có hai target dashboard/editor nên dùng hai tag của cùng tên image. Tên Compose project Homepage giữ nguyên `homepage-portable` để không thay đổi định danh volume của bản cài hiện có.
 

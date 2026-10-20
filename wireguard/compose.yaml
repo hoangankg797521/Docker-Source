@@ -1,0 +1,99 @@
+name: wireguard-custom
+x-logging: &logging
+  driver: json-file
+  options: {max-size: 10m, max-file: '3'}
+services:
+  netns:
+    image: ${ACL_IMAGE:-ghcr.io/hoangankg797521/wg-acl:1.0.0}
+    command: [python, -c, 'import time; time.sleep(100000000)']
+    restart: unless-stopped
+    ports:
+      - '${VPN_BIND_IP:-0.0.0.0}:${VPN_PORT:-51820}:51820/udp'
+      - '${WEB_BIND_IP:-127.0.0.1}:${WG_WEB_PORT:-51821}:51821/tcp'
+    sysctls:
+      net.ipv4.ip_forward: '1'
+      net.ipv6.conf.all.disable_ipv6: '1'
+    networks: [vpn]
+    logging: *logging
+  acl:
+    image: ${ACL_IMAGE:-ghcr.io/hoangankg797521/wg-acl:1.0.0}
+    build: ./acl
+    network_mode: service:netns
+    depends_on: [netns]
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    environment:
+      ACL_SCOPE: ${ACL_SCOPE:?Run python3 scripts/configure.py first}
+    read_only: true
+    tmpfs: ['/tmp:size=16m']
+    volumes:
+      - acl-data:/data
+      - ./secrets/wg_token:/run/secrets/wg_token:ro
+      - ./secrets/noc_token:/run/secrets/noc_token:ro
+      - ./config/legacy-ids.json:/config/legacy-ids.json:ro
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8089/health',timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+    mem_limit: 192m
+    logging: *logging
+  wg-easy:
+    image: ${WG_IMAGE:-ghcr.io/hoangankg797521/wg-easy:1.0.0}
+    build: ./wg-easy
+    network_mode: service:netns
+    depends_on:
+      acl: {condition: service_healthy}
+    cap_add: [NET_ADMIN]
+    env_file: ./secrets/bootstrap.env
+    environment:
+      INSECURE: 'true'
+      DISABLE_IPV6: 'true'
+      ACL_BACKEND_URL: http://127.0.0.1:8089
+      ACL_TOKEN_FILE: /run/secrets/wg_token
+    volumes:
+      - wg-config:/etc/wireguard
+      - ./secrets/wg_token:/run/secrets/wg_token:ro
+    restart: unless-stopped
+    logging: *logging
+  noc:
+    image: ${NOC_IMAGE:-ghcr.io/hoangankg797521/wg-noc:1.0.0}
+    build: ./noc-dashboard
+    depends_on:
+      wg-easy: {condition: service_healthy}
+    environment:
+      WG_EASY_URL: http://netns:51821
+      WG_EASY_UI_URL: ${WG_EASY_UI_URL:-http://localhost:51821}
+      WG_EASY_VERSION: 15.4.0
+      VPN_ENDPOINT: ${VPN_ENDPOINT:?Run configure.py first}
+      VPN_SUBNET: 10.255.66.0/24
+      VPN_DNS: ${VPN_DNS:-1.1.1.1}
+      VPN_PORT: ${VPN_PORT:-51820}
+      ACL_BACKEND_URL: http://netns:8089
+      ACL_TOKEN_FILE: /run/secrets/noc_token
+      DATA_DIR: /data
+      PORT: '8080'
+    ports: ['${WEB_BIND_IP:-127.0.0.1}:${NOC_WEB_PORT:-51822}:8080/tcp']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    read_only: true
+    tmpfs: ['/tmp:size=16m']
+    volumes:
+      - noc-data:/data
+      - ./secrets/noc_token:/run/secrets/noc_token:ro
+      - /proc/stat:/host/proc/stat:ro
+      - /proc/meminfo:/host/proc/meminfo:ro
+      - /proc/uptime:/host/proc/uptime:ro
+      - /etc/hostname:/vm-disk-marker:ro
+    networks: [vpn]
+    restart: unless-stopped
+    mem_limit: 256m
+    pids_limit: 64
+    logging: *logging
+networks:
+  vpn:
+volumes:
+  wg-config:
+  acl-data:
+  noc-data:

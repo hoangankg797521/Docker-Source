@@ -1,0 +1,20 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const elements=new Map();const element=()=>({textContent:'',innerHTML:'',children:[],classList:{add(){},remove(){}},contains(){return false}});
+const document={querySelector:s=>{if(!elements.has(s))elements.set(s,element());return elements.get(s)},querySelectorAll:()=>[],addEventListener(){},activeElement:null};
+const c=vm.createContext({console,document,localStorage:{getItem:()=>null},setTimeout,clearTimeout,setInterval,clearInterval,Headers,Date,Map});
+vm.runInContext(fs.readFileSync(process.argv[2],'utf8'),c);
+(async()=>{
+ vm.runInContext("state.clients=[{name:'A',ipv4Address:'10.0.0.1',state:'active'},{name:'B',ipv4Address:'10.0.0.2',state:'inactive'}];state.statusFilter='inactive';state.query='';",c);
+ assert.equal(vm.runInContext('filtered()[0].name',c),'B');
+ vm.runInContext("state.query='10.0.0.1'",c);assert.equal(vm.runInContext('filtered().length',c),0);
+ let release,calls=0;const b={disabled:false,innerHTML:'Save',isConnected:true,setAttribute(){},removeAttribute(){}};c.b=b;c.work=()=>{calls++;return new Promise(r=>release=r)};
+ const pending=vm.runInContext('busyAction(b,work)',c);await vm.runInContext('busyAction(b,work)',c);assert.equal(calls,1);assert.equal(b.disabled,true);release();await pending;assert.equal(b.disabled,false);assert.equal(b.innerHTML,'Save');
+ c.work=()=>Promise.reject(Error('failed'));await assert.rejects(vm.runInContext('busyAction(b,work)',c),/failed/);assert.equal(b.disabled,false);
+ let renders=0,overviewCalls=0,resolveOverview;c.render=()=>renders++;c.request=path=>{if(path==='/api/overview'){overviewCalls++;return new Promise(r=>resolveOverview=r)}if(path==='/api/config')return Promise.resolve(null);return Promise.resolve({series:[]})};
+ vm.runInContext("api=request;renderPage=render;state.user='admin';state.page='clients';state.overview={};",c);
+ const r1=vm.runInContext('refresh()',c),r2=vm.runInContext('refresh()',c);assert.equal(r1,r2);assert.equal(overviewCalls,1);
+ resolveOverview({clients:[],server:{vpnEndpoint:'example',udpPort:51820}});await r1;assert.equal(renders,1);
+ vm.runInContext("state.page='configuration'",c);const r3=vm.runInContext('refresh()',c);resolveOverview({clients:[],server:{}});await r3;assert.equal(renders,1);
+ vm.runInContext("state.history=[{rx:9}];api=()=>Promise.reject(Error('offline'))",c);await vm.runInContext('loadHistory()',c);assert.equal(vm.runInContext('state.history[0].rx',c),9);assert.equal(vm.runInContext('state.historyError',c),'offline');
+ console.log('PASS: persisted filter, duplicate-action guard, busy/error reset, single-flight refresh, one render, form protection, stale chart data');
+})().catch(e=>{console.error(e);process.exitCode=1});
