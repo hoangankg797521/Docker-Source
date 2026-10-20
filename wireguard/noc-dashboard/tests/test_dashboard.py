@@ -79,20 +79,20 @@ class DashboardTests(unittest.TestCase):
 
     def test_server_config_validation_accepts_host_and_dns(self):
         result = app.validated_server_config_input({
-            "host": "vpn.example.com", "port": "51820", "dns": "10.0.0.18, 1.1.1.1",
+            "host": "vpn.example.com", "port": "51820", "dns": "192.168.50.53, 1.1.1.1",
             "allowedIps": "10.255.66.0/24\n172.16.8.0/22, 10.0.0.0/16"
         })
         self.assertEqual(result, {"host": "vpn.example.com", "port": 51820,
-                                  "dns": ["10.0.0.18", "1.1.1.1"],
+                                  "dns": ["192.168.50.53", "1.1.1.1"],
                                   "allowedIps": ["10.255.66.0/24", "172.16.8.0/22", "10.0.0.0/16"]})
-        self.assertEqual(app.server_config_summary({"host": "113.161.37.212", "port": 51820,
-            "defaultDns": ["10.0.0.18"], "defaultAllowedIps": ["10.0.0.0/16"]})["allowedIps"],
+        self.assertEqual(app.server_config_summary({"host": "203.0.113.10", "port": 51820,
+            "defaultDns": ["192.168.50.53"], "defaultAllowedIps": ["10.0.0.0/16"]})["allowedIps"],
             ["10.0.0.0/16"])
 
     def test_server_config_validation_rejects_invalid_network_values(self):
         with self.assertRaises(app.UpstreamError):
             app.validated_server_config_input({"host": "vpn.example.com", "port": 70000,
-                                               "dns": ["10.0.0.18"]})
+                                               "dns": ["192.168.50.53"]})
         with self.assertRaises(app.UpstreamError):
             app.validated_server_config_input({"host": "vpn.example.com", "port": 51820,
                                                "dns": ["not-an-ip"], "allowedIps": ["10.0.0.0/16"]})
