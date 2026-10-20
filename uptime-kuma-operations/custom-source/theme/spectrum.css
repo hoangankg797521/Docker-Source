@@ -1,0 +1,262 @@
+/* Uptime Kuma Spectrum v1 — visual layer only, loaded after Operations. */
+#app > .light {
+    --ops-bg: #f6f4f0;
+    --ops-surface: #fffefa;
+    --ops-ink: #262c43;
+    --ops-muted: #74788a;
+    --ops-line: #e7e4e0;
+    --ops-hover: #f2effa;
+    background: radial-gradient(ellipse at 95% 5%, #e7dffa88, transparent 42%),
+        radial-gradient(ellipse at 10% 80%, #ffe8cf66, transparent 42%), var(--ops-bg);
+}
+#app > .dark {
+    --ops-bg: #151726;
+    --ops-surface: #202336;
+    --ops-ink: #edf0fa;
+    --ops-muted: #b1b6cb;
+    --ops-line: #34374f;
+    --ops-hover: #2b2c46;
+    background: radial-gradient(ellipse at 95% 5%, #47355e44, transparent 48%), var(--ops-bg);
+}
+#app > :is(.light, .dark) > header {
+    background: linear-gradient(110deg, #20253f, #303253 65%, #44385c);
+    border-bottom: 3px solid #c8a879 !important;
+    box-shadow: 0 5px 22px #24203a20;
+}
+#app > :is(.light, .dark) > header .title,
+#app > :is(.light, .dark) > header .nav-link {
+    color: #f6f4ff !important;
+}
+#app > :is(.light, .dark) > header .nav-link.active {
+    background: #ffffff19 !important;
+    border: 1px solid #ffffff30;
+    box-shadow: inset 0 1px #ffffff18;
+}
+#app > :is(.light, .dark) > header .btn {
+    color: #f6f4ff;
+    background: #ffffff12;
+    border-color: #ffffff24;
+}
+#app > :is(.light, .dark) .btn-primary {
+    color: #fff;
+    background: #287d78;
+    border-color: #287d78;
+    box-shadow: 0 4px 10px #287d7820;
+}
+#app > :is(.light, .dark) .btn-primary:hover {
+    background: #206762;
+    border-color: #206762;
+}
+#app > :is(.light, .dark) .shadow-box {
+    border-color: var(--ops-line);
+    box-shadow: 0 4px 20px #2d264407;
+}
+#app > :is(.light, .dark) div:has(> .big-padding.text-center h3) > h1 {
+    margin: 4px 0 20px !important;
+    letter-spacing: -.8px;
+}
+#app > :is(.light, .dark) div:has(> .big-padding.text-center h3) > h1::before {
+    content: "OPERATIONS OVERVIEW";
+    display: block;
+    margin-bottom: 7px;
+    color: #8271ad;
+    font-size: .62rem;
+    font-weight: 750;
+    letter-spacing: 2.2px;
+}
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin-bottom: 24px !important;
+}
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) > .row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col {
+    --tile: #ebf6ef;
+    --accent: #24815b;
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    padding: 21px 16px 18px;
+    border: 1px solid color-mix(in srgb, var(--accent) 17%, transparent);
+    border-top: 3px solid var(--accent);
+    border-radius: 15px;
+    background: var(--tile);
+    text-align: left;
+}
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col::after {
+    content: "";
+    position: absolute;
+    right: -12px;
+    bottom: -20px;
+    width: 78px;
+    height: 78px;
+    border: 13px solid var(--accent);
+    border-radius: 50%;
+    opacity: .055;
+    pointer-events: none;
+}
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col:nth-child(2) { --tile: #fceef0; --accent: #bc4664; }
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col:nth-child(3) { --tile: #fff3dd; --accent: #976515; }
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col:nth-child(4) { --tile: #f0ebfa; --accent: #7c59af; }
+#app > :is(.light, .dark) .big-padding.text-center:has(h3) .col:nth-child(5) { --tile: #eaf0f6; --accent: #526c8a; }
+#app > :is(.light, .dark) .big-padding:has(h3) h3 {
+    color: var(--accent);
+    font-size: .72rem;
+    letter-spacing: .15px;
+    margin-bottom: 17px;
+}
+#app > :is(.light, .dark) .big-padding:has(h3) .num,
+#app > :is(.light, .dark) .big-padding:has(h3) .num.text-secondary {
+    color: var(--accent) !important;
+    font-size: 2.35rem;
+    font-weight: 760;
+    letter-spacing: -1.8px;
+}
+#app > :is(.light, .dark) .list-header {
+    background: linear-gradient(130deg, var(--ops-surface), var(--ops-hover));
+    border-radius: 15px 15px 0 0;
+    border-bottom-color: var(--ops-line);
+}
+#app > :is(.light, .dark) .search-input {
+    background: var(--ops-surface);
+    border-color: var(--ops-line);
+}
+#app > :is(.light, .dark) .monitor-list .item:hover {
+    background: var(--ops-hover);
+}
+#app > :is(.light, .dark) .monitor-list .item.active {
+    background: var(--ops-hover);
+    box-shadow: inset 3px 0 #8970c5;
+}
+#app > :is(.light, .dark) .table-wrapper > .text-end {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+#app > :is(.light, .dark) .table-wrapper > .text-end::before {
+    content: "Recent activity";
+    color: var(--ops-ink);
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -.25px;
+    text-align: left;
+}
+#app > :is(.light, .dark) .table thead th {
+    color: #756681;
+    background: #f1edf5;
+    border-bottom-color: #e6dfec;
+    font-weight: 700;
+}
+#app > :is(.light, .dark) .table tbody tr:nth-child(even) {
+    --bs-table-bg: #f7f5fa66;
+}
+#app > :is(.light, .dark) .table td a {
+    color: #66518f;
+}
+#app > :is(.light, .dark) .table td a:hover {
+    color: #8a52b6;
+}
+#app > .dark .big-padding.text-center:has(h3) .col:nth-child(1) { --tile: #203b34; --accent: #85d5ad; }
+#app > .dark .big-padding.text-center:has(h3) .col:nth-child(2) { --tile: #402b39; --accent: #ef99b1; }
+#app > .dark .big-padding.text-center:has(h3) .col:nth-child(3) { --tile: #3e3529; --accent: #e5bf77; }
+#app > .dark .big-padding.text-center:has(h3) .col:nth-child(4) { --tile: #332c48; --accent: #c3a5ec; }
+#app > .dark .big-padding.text-center:has(h3) .col:nth-child(5) { --tile: #293448; --accent: #a5bddc; }
+#app > .dark .table thead th { background: #302c44; color: #c8badb; border-color: #423b55; }
+#app > .dark .table tbody tr:nth-child(even) { --bs-table-bg: #302b3e44; }
+#app > .dark .table td a { color: #c6aceb; }
+#app > :is(.light, .dark) :focus-visible { outline: 3px solid #a591d7; outline-offset: 3px; }
+@media (max-width: 991px) {
+    #app > :is(.light, .dark) .big-padding.text-center:has(h3) > .row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 575px) {
+    #app > :is(.light, .dark) > header { padding: 14px 16px !important; }
+    #app > :is(.light, .dark) .big-padding.text-center:has(h3) > .row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    #app > :is(.light, .dark) .big-padding.text-center:has(h3) .col { padding: 16px; }
+    #app > :is(.light, .dark) .big-padding.text-center:has(h3) .col:last-child { grid-column: 1 / -1; }
+    #app > :is(.light, .dark) .big-padding:has(h3) .num { font-size: 2rem; }
+    #app > :is(.light, .dark) .table-wrapper { padding: 16px; }
+}
+#app > .dark .list-header button,
+#app > .dark .list-header .btn {
+    color: #d8d7e9;
+    background: #2d2f46;
+    border-color: #50516b;
+}
+#app > .dark .search-input::placeholder { color: #b1b6cb; }
+#app > .dark .btn-outline-danger {
+    color: #f4a0b6;
+    border-color: #99566e;
+}
+#app > .dark .btn-outline-danger:hover { color: #fff; background: #993f5a; }
+/* Device list: compact cards with persistent individual selection. */
+#app > :is(.light, .dark) .monitor-list {
+    background: color-mix(in srgb, var(--ops-bg) 75%, var(--ops-surface));
+    padding-top: 8px;
+    padding-bottom: 10px;
+}
+#app > :is(.light, .dark) .monitor-list .draggable-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 58px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding: 4px 8px;
+    border: 1px solid var(--ops-line);
+    border-radius: 11px;
+    background: var(--ops-surface);
+    box-shadow: 0 2px 4px #20253f04;
+}
+#app > :is(.light, .dark) .monitor-list .draggable-item:hover {
+    border-color: #8dbab3;
+    background: color-mix(in srgb, var(--ops-surface) 90%, #287d78);
+}
+#app > :is(.light, .dark) .monitor-list .draggable-item:has(.item[aria-current="page"]),
+#app > :is(.light, .dark) .monitor-list .draggable-item.monitor-selected {
+    border-color: #6baba0;
+    background: color-mix(in srgb, var(--ops-surface) 90%, #287d78);
+    box-shadow: inset 3px 0 #287d78;
+}
+#app > :is(.light, .dark) .monitor-list .draggable-item.drag-over {
+    border: 2px dashed #287d78;
+}
+#app > :is(.light, .dark) .monitor-list .draggable-item .item,
+#app > :is(.light, .dark) .monitor-list .draggable-item .item:hover,
+#app > :is(.light, .dark) .monitor-list .draggable-item .item.active {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding: 8px 5px;
+    background: transparent;
+    box-shadow: none;
+}
+#app > :is(.light, .dark) .monitor-list .select-input-wrapper {
+    float: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 22px;
+    margin: 0;
+    padding: 0;
+    z-index: auto;
+}
+#app > :is(.light, .dark) .monitor-list .select-input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border-color: #aebfbc;
+    cursor: pointer;
+}
+#app > :is(.light, .dark) .monitor-list .select-input:checked {
+    background-color: #287d78;
+    border-color: #287d78;
+}
+#app > :is(.light, .dark) .monitor-list .item .text-truncate { font-weight: 550; }

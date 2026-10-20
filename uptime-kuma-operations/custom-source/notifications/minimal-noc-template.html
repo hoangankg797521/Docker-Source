@@ -1,0 +1,19 @@
+{% if heartbeatJSON %}{% if heartbeatJSON.status == 0 %}<b>🔴 DEVICE DOWN</b>{% else %}<b>🟢 DEVICE UP</b>{% endif %}
+━━━━━━━━━━━━━━
+🖥 <b>{{ name | escape }}</b>
+🌐 <code>{{ hostnameOrURL | escape }}</code>
+{% if monitorJSON.type == "ping" %}📡 ICMP Ping
+{% if heartbeatJSON.status == 0 and msg contains "packet loss" %}📉 Packet Loss: <b>{{ msg | split: "packet loss" | first | split: "," | last | strip | escape }}</b>
+{% endif %}{% elsif monitorJSON.type == "tcp" %}📡 TCP Port: <b>{{ monitorJSON.port | escape }}</b>
+🔌 Connection: <b>{% if heartbeatJSON.status == 0 %}Failed{% else %}Established{% endif %}</b>
+{% elsif monitorJSON.type == "http" or monitorJSON.type == "http-keyword" %}🌐 HTTP(S) check
+{% if heartbeatJSON.status == 0 and msg %}📝 Error: {{ msg | strip_html | truncate: 140 | escape }}
+{% endif %}{% else %}📡 <b>{{ monitorJSON.type | escape }}</b>
+{% if heartbeatJSON.status == 0 and msg %}📝 Detail: {{ msg | strip_html | truncate: 140 | escape }}
+{% endif %}{% endif %}{% if heartbeatJSON.lastDownTime and heartbeatJSON.time %}{% assign recoveryEpoch = heartbeatJSON.time | date: "%s" | plus: 0 %}{% assign downEpoch = heartbeatJSON.lastDownTime | date: "%s" | plus: 0 %}{% assign downtimeSeconds = recoveryEpoch | minus: downEpoch %}{% if downtimeSeconds >= 0 %}{% assign downtimeDays = downtimeSeconds | divided_by: 86400 | floor %}{% assign downtimeHours = downtimeSeconds | modulo: 86400 | divided_by: 3600 | floor %}{% assign downtimeMinutes = downtimeSeconds | modulo: 3600 | divided_by: 60 | floor %}{% assign downtimeRemainder = downtimeSeconds | modulo: 60 %}⏱ Downtime: <b>{% if downtimeDays > 0 %}{{ downtimeDays }}d {{ downtimeHours }}h{% elsif downtimeHours > 0 %}{{ downtimeHours }}h {{ downtimeMinutes }}m{% elsif downtimeMinutes > 0 %}{{ downtimeMinutes }}m {{ downtimeRemainder }}s{% else %}{{ downtimeRemainder }}s{% endif %}</b>
+{% endif %}{% endif %}{% if heartbeatJSON.localDateTime %}🕒 {{ heartbeatJSON.localDateTime | escape }}
+{% endif %}━━━━━━━━━━━━━━
+<i>UPTIME KUMA • MONITORING</i>{% else %}<b>🧪 NOTIFICATION TEST</b>
+
+✅ Telegram alert formatting is configured.
+<i>UPTIME KUMA • MONITORING</i>{% endif %}

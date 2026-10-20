@@ -1,0 +1,19 @@
+services:
+  uptime-kuma:
+    image: uptime-kuma-operations:${UPTIME_KUMA_VERSION:-2.5.6}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UPTIME_KUMA_VERSION: ${UPTIME_KUMA_VERSION:-2.5.6}
+    restart: unless-stopped
+    ports:
+      - "${UPTIME_KUMA_PORT:-3001}:3001"
+    environment:
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    volumes:
+      - ${UPTIME_KUMA_DATA_DIR:-./data}:/app/data
+    cap_add:
+      - NET_RAW
+    security_opt:
+      - no-new-privileges:true

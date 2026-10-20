@@ -1,0 +1,480 @@
+/* Uptime Kuma Operations theme v1. Presentation only; no remote assets. */
+#app > :is(.light, .dark) {
+    --ops-bg: #f2f5f9;
+    --ops-surface: #fff;
+    --ops-ink: #172b43;
+    --ops-muted: #61738a;
+    --ops-line: #dde5ee;
+    --ops-hover: #edf3f9;
+    min-height: 100vh;
+    background: var(--ops-bg);
+    color: var(--ops-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+#app > .dark {
+    --ops-bg: #101923;
+    --ops-surface: #192534;
+    --ops-ink: #e4edf7;
+    --ops-muted: #a4b5c8;
+    --ops-line: #304156;
+    --ops-hover: #223348;
+}
+#app > :is(.light, .dark) > header {
+    background: var(--ops-surface);
+    border-bottom: 1px solid var(--ops-line) !important;
+    padding: 18px 24px !important;
+    margin-bottom: 26px !important;
+    box-shadow: 0 2px 10px #102a4310;
+}
+#app > :is(.light, .dark) .title {
+    color: var(--ops-ink);
+    font-weight: 750;
+    letter-spacing: -.6px;
+}
+#app > :is(.light, .dark) h1 {
+    font-size: clamp(1.5rem, 2.1vw, 2rem);
+    font-weight: 750;
+    letter-spacing: -.6px;
+}
+#app > :is(.light, .dark) .shadow-box {
+    background: var(--ops-surface);
+    border: 1px solid var(--ops-line);
+    border-radius: 16px;
+    box-shadow: 0 3px 16px #102a4308;
+}
+#app > :is(.light, .dark) .big-padding.text-center {
+    padding: 0;
+    overflow: hidden;
+}
+#app > :is(.light, .dark) .big-padding.text-center > .row {
+    margin: 0;
+}
+#app > :is(.light, .dark) .big-padding.text-center .col {
+    padding: 24px 12px;
+    border-inline-end: 1px solid var(--ops-line);
+    min-width: 110px;
+}
+#app > :is(.light, .dark) .big-padding.text-center .col:last-child {
+    border-inline-end: 0;
+}
+#app > :is(.light, .dark) .big-padding h3 {
+    color: var(--ops-muted);
+    font-size: .8rem;
+    font-weight: 650;
+    letter-spacing: .4px;
+    margin-bottom: 12px;
+}
+#app > :is(.light, .dark) .big-padding .num {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+#app > :is(.light, .dark) .table-wrapper {
+    padding: 22px;
+}
+#app > :is(.light, .dark) .table {
+    color: var(--ops-ink);
+    font-size: .875rem;
+    --bs-table-hover-bg: var(--ops-hover);
+    --bs-table-hover-color: var(--ops-ink);
+}
+#app > :is(.light, .dark) .table thead th {
+    color: var(--ops-muted);
+    background: var(--ops-hover);
+    font-size: .75rem;
+    letter-spacing: .3px;
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--ops-line);
+}
+#app > :is(.light, .dark) .table tbody td {
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--ops-line) !important;
+    vertical-align: middle;
+}
+#app > :is(.light, .dark) .table a {
+    color: var(--ops-ink);
+    font-weight: 600;
+    text-decoration: none;
+}
+#app > :is(.light, .dark) .table a:hover {
+    text-decoration: underline;
+}
+#app > :is(.light, .dark) .btn {
+    border-radius: 9px;
+    font-weight: 600;
+    min-height: 36px;
+}
+#app > :is(.light, .dark) :is(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid #3486de;
+    outline-offset: 3px;
+}
+#app > :is(.light, .dark) .form-control,
+#app > :is(.light, .dark) .form-select {
+    border-color: var(--ops-line);
+    border-radius: 9px;
+}
+#app > :is(.light, .dark) .list-header {
+    padding: 18px;
+    border-bottom: 1px solid var(--ops-line);
+}
+#app > :is(.light, .dark) .item {
+    border-radius: 9px;
+    margin: 3px 8px;
+}
+#app > :is(.light, .dark) .item:hover {
+    background: var(--ops-hover);
+}
+#app > :is(.light, .dark) .nav-pills .nav-link {
+    border-radius: 9px;
+    font-weight: 600;
+}
+#app > :is(.light, .dark) .bottom-nav {
+    background: var(--ops-surface);
+    border-top: 1px solid var(--ops-line);
+    box-shadow: 0 -3px 16px #102a430a;
+}
+#app > :is(.light, .dark) .form-container .form {
+    background: var(--ops-surface);
+    padding: 32px;
+    border: 1px solid var(--ops-line);
+    border-radius: 18px;
+    box-shadow: 0 12px 40px #102a4310;
+}
+/* Give additional monitor checks a compact, structured form layout. */
+#app > :is(.light, .dark) .additional-checks-section {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 12px 0 !important;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+#app > :is(.light, .dark) .additional-checks-header {
+    align-items: flex-start !important;
+}
+#app > :is(.light, .dark) .additional-check-row {
+    width: 100%;
+    margin: 10px 0 0;
+    padding: 12px 14px;
+    border: 1px solid var(--ops-line);
+    border-radius: 10px;
+    background: var(--ops-hover);
+}
+#app > :is(.light, .dark) .additional-check-row .form-label {
+    margin-bottom: 6px;
+    color: var(--ops-muted);
+    font-size: .82rem;
+    font-weight: 650;
+}
+#app > :is(.light, .dark) .additional-check-remove {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    padding: 0;
+}
+@media (max-width: 767px) {
+    #app > :is(.light, .dark) > header {
+        padding: 15px 12px !important;
+        margin-bottom: 20px !important;
+    }
+    #app > :is(.light, .dark) main {
+        padding-inline: 6px;
+    }
+    #app > :is(.light, .dark) .big-padding.text-center .col {
+        padding: 18px 8px;
+        min-width: 90px;
+        flex-basis: 30%;
+        border-bottom: 1px solid var(--ops-line);
+    }
+    #app > :is(.light, .dark) .big-padding .num {
+        font-size: 2rem;
+    }
+    #app > :is(.light, .dark) .table-wrapper {
+        padding: 12px;
+    }
+    #app > :is(.light, .dark) .form-container .form {
+        padding: 24px;
+        max-width: calc(100vw - 32px);
+    }
+    #app > :is(.light, .dark) .additional-check-row {
+        padding: 12px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    #app > :is(.light, .dark) *,
+    #app > :is(.light, .dark) *::before,
+    #app > :is(.light, .dark) *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+/* Keep the monitor list compact and give event timestamps enough room. */
+@media (min-width: 1200px) {
+    #app > :is(.light, .dark) main .container-fluid > .row > .col-xl-4 {
+        flex: 0 0 32%;
+        width: 32%;
+        max-width: 32%;
+    }
+    #app > :is(.light, .dark) main .container-fluid > .row > .col-xl-8 {
+        flex: 0 0 68%;
+        width: 68%;
+        max-width: 68%;
+    }
+    #app > :is(.light, .dark) .draggable-item .item > .row > .small-padding {
+        flex: 0 0 69%;
+        width: 69%;
+        max-width: 69%;
+    }
+    #app > :is(.light, .dark) .draggable-item .item > .row > :last-child {
+        flex: 0 0 31%;
+        width: 31%;
+        max-width: 31%;
+    }
+}
+/* Keep status narrow; keep Date/Time on one line in detail and dashboard tables. */
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(4)):not(:has(th:nth-child(5))) td:nth-child(2),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(4)):not(:has(th:nth-child(5))) th:nth-child(2),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(5)) td:nth-child(3),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(5)) th:nth-child(3) {
+    white-space: nowrap;
+    min-width: 82px;
+    width: 82px;
+}
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(3)):not(:has(th:nth-child(4))) td:nth-child(2),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(3)):not(:has(th:nth-child(4))) th:nth-child(2),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(4)):not(:has(th:nth-child(5))) td:nth-child(3),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(4)):not(:has(th:nth-child(5))) th:nth-child(3),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(5)) td:nth-child(4),
+#app > :is(.light, .dark) .table-wrapper .table:has(th:nth-child(5)) th:nth-child(4) {
+    white-space: nowrap;
+    min-width: 178px;
+}
+#app > :is(.light, .dark) .draggable-item .item {
+    padding: 8px 10px;
+}
+#app > :is(.light, .dark) .draggable-item .item > .row {
+    align-items: center;
+}
+/* Fit long names, detail timestamps, and uptime values without clipping. */
+#app > :is(.light, .dark) .draggable-item .item .text-truncate {
+    font-size: 14px;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    line-height: 1.2;
+}
+#app > :is(.light, .dark) .shadow-box .table:has(th:nth-child(3)):not(:has(th:nth-child(4))) td:nth-child(2),
+#app > :is(.light, .dark) .shadow-box .table:has(th:nth-child(3)):not(:has(th:nth-child(4))) th:nth-child(2) {
+    white-space: nowrap;
+    min-width: 178px;
+}
+@media (min-width: 1200px) {
+    #app > :is(.light, .dark) .big-padding .num {
+        font-size: 1.8rem;
+    }
+}
+@media (max-width: 767px) {
+    #app > :is(.light, .dark) .table td:nth-child(2),
+    #app > :is(.light, .dark) .table th:nth-child(2),
+    #app > :is(.light, .dark) .table-wrapper .table td:nth-child(3),
+    #app > :is(.light, .dark) .table-wrapper .table th:nth-child(3) {
+        min-width: 160px;
+    }
+}
+
+/* Keep the checks panel spanning the full General column instead of shrinking to content. */
+#app > :is(.light, .dark) .additional-checks-section {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+#app > :is(.light, .dark) .additional-checks-section > .additional-check-row {
+    width: 100%;
+    margin-inline: 0;
+}
+#app > :is(.light, .dark) .additional-checks-section .additional-checks-header {
+    width: 100%;
+}
+
+/* Align each supplemental check's editable fields with the primary check row. */
+#app > :is(.light, .dark) .additional-checks-section > .additional-check-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-end;
+    gap: 12px;
+    width: 100%;
+    margin: 10px 0 0 !important;
+    padding: 12px;
+    box-sizing: border-box;
+}
+#app > :is(.light, .dark) .additional-check-row > [class*="col-"] {
+    width: auto !important;
+    max-width: none;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-md-4 {
+    flex: 1 1 170px !important;
+    min-width: 138px;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-md-4:first-child {
+    flex-grow: 1 !important;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-md-4:nth-child(2) {
+    flex-grow: 1.25 !important;
+    flex-basis: 220px !important;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-md-6 {
+    flex: 1 1 220px !important;
+    min-width: 138px;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-md-2 {
+    flex: .8 1 120px !important;
+    min-width: 90px;
+}
+#app > :is(.light, .dark) .additional-check-row > .col-auto {
+    flex: 0 0 38px !important;
+    width: 38px !important;
+}
+#app > :is(.light, .dark) .additional-check-row .form-control,
+#app > :is(.light, .dark) .additional-check-row .form-select {
+    width: 100%;
+    min-width: 0;
+}
+#app > :is(.light, .dark) .additional-check-row .additional-check-remove {
+    width: 38px;
+    height: 38px;
+}
+#app > :is(.light, .dark) .additional-check-row .additional-check-remove svg {
+    width: 16px;
+    height: 16px;
+}
+@media (max-width: 767px) {
+    #app > :is(.light, .dark) .additional-checks-section > .additional-check-row {
+        flex-wrap: wrap !important;
+        gap: 10px;
+        padding: 12px;
+    }
+    #app > :is(.light, .dark) .additional-check-row > .col-md-4,
+    #app > :is(.light, .dark) .additional-check-row > .col-md-6,
+    #app > :is(.light, .dark) .additional-check-row > .col-md-2 {
+        flex: 1 1 calc(50% - 6px) !important;
+    }
+    #app > :is(.light, .dark) .additional-check-row > .col-auto {
+        margin-left: auto !important;
+    }
+}
+
+/* Per-protocol health summary on monitor details. */
+#app > :is(.light, .dark) .protocol-health-panel {
+    margin: 14px 0 22px;
+    padding: 20px 22px;
+    border: 1px solid var(--ops-line);
+    border-radius: 16px;
+    background: var(--ops-surface);
+    box-shadow: 0 3px 16px #102a4308;
+}
+#app > :is(.light, .dark) .protocol-health-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+#app > :is(.light, .dark) .protocol-health-heading h2 {
+    color: var(--ops-ink);
+    font-weight: 700;
+}
+#app > :is(.light, .dark) .protocol-health-count {
+    color: var(--ops-muted);
+    font-size: .82rem;
+    font-weight: 650;
+    white-space: nowrap;
+}
+#app > :is(.light, .dark) .protocol-health-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 10px;
+}
+#app > :is(.light, .dark) .protocol-health-item {
+    display: flex;
+    min-width: 0;
+    min-height: 62px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 14px;
+    border: 1px solid var(--ops-line);
+    border-radius: 11px;
+    background: var(--ops-hover);
+}
+#app > :is(.light, .dark) .protocol-health-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+#app > :is(.light, .dark) .protocol-health-name {
+    color: var(--ops-ink);
+    font-size: .92rem;
+    font-weight: 700;
+}
+#app > :is(.light, .dark) .protocol-health-target {
+    overflow: hidden;
+    color: var(--ops-muted);
+    font-size: .8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#app > :is(.light, .dark) .protocol-health-state {
+    flex: 0 0 auto;
+    min-width: 72px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 750;
+    text-align: center;
+    letter-spacing: .35px;
+}
+#app > :is(.light, .dark) .protocol-state-up {
+    background: #d9f7e7;
+    color: #147a43;
+}
+#app > :is(.light, .dark) .protocol-state-down {
+    background: #ffe0e3;
+    color: #b42336;
+}
+#app > :is(.light, .dark) .protocol-state-unknown {
+    background: #e8edf3;
+    color: #65758a;
+}
+@media (max-width: 575px) {
+    #app > :is(.light, .dark) .protocol-health-panel {
+        padding: 16px;
+    }
+    #app > :is(.light, .dark) .protocol-health-list {
+        grid-template-columns: 1fr;
+    }
+}
+#app > .dark .protocol-state-up {
+    background: #164832;
+    color: #8ce0b0;
+}
+#app > .dark .protocol-state-down {
+    background: #542933;
+    color: #ffabb5;
+}
+#app > .dark .protocol-state-unknown {
+    background: #304156;
+    color: #c0cede;
+}
