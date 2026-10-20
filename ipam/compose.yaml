@@ -1,0 +1,55 @@
+name: ipam
+services:
+  postgres:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ipam}
+      POSTGRES_USER: ${POSTGRES_USER:-ipam}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run python3 scripts/configure.py first}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+  app:
+    build:
+      context: .
+    image: ${IPAM_IMAGE:-ipam:local}
+    restart: unless-stopped
+    network_mode: host
+    cap_add: [NET_RAW, NET_ADMIN]
+    environment:
+      DB_BACKEND: postgres
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DB: ${POSTGRES_DB:-ipam}
+      POSTGRES_USER: ${POSTGRES_USER:-ipam}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run python3 scripts/configure.py first}
+      IPAM_ADMIN_PASSWORD: ${IPAM_ADMIN_PASSWORD:?Run python3 scripts/configure.py first}
+      DHCP_SYNC_TOKEN: ${DHCP_SYNC_TOKEN:?Run python3 scripts/configure.py first}
+      APP_PORT: ${APP_PORT:-8088}
+      APP_BIND: 0.0.0.0
+      AUTH_SECURE_COOKIE: ${AUTH_SECURE_COOKIE:-0}
+      SESSION_HOURS: ${SESSION_HOURS:-8}
+      IPAM_STUDIO_ADVANCED_VIEWS: "1"
+      SCAN_CONCURRENCY: "512"
+      SCAN_TIMEOUT_MS: "350"
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    volumes:
+      - app-data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+volumes:
+  postgres-data:
+  app-data:

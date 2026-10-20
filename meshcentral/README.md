@@ -31,7 +31,7 @@ MESH_BRAND_NAME=Your Organization
 `HOSTNAME` phải là tên DNS hoặc địa chỉ IP thực tế dùng để truy cập MeshCentral, không gồm giao thức, cổng hay đường dẫn. Có thể đổi `HTTP_PORT` hoặc `HTTPS_PORT` nếu cổng host 80/443 đang được dùng.
 
 ```sh
-docker build --build-arg MESHCENTRAL_VERSION=1.2.6 -t meshcentral-custom:1.2.6 .
+docker build --build-arg MESHCENTRAL_VERSION=1.2.6 -t meshcentral:1.2.6 .
 docker compose up -d
 docker compose ps
 docker compose logs -f meshcentral

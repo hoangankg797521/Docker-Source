@@ -10,7 +10,7 @@ Yêu cầu Docker Engine/Desktop, Docker Compose v2, Git và Internet để tả
 
 ```sh
 git clone https://github.com/hoangankg797521/Docker-Source.git
-cd Docker-Source/homepage-portable
+cd Docker-Source/homepage
 cp .env.example .env
 ```
 

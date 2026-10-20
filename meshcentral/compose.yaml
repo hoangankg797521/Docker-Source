@@ -1,6 +1,6 @@
 services:
   meshcentral:
-    image: meshcentral-custom:${IMAGE_TAG:-1.2.6}
+    image: meshcentral:${IMAGE_TAG:-1.2.6}
     build:
       context: .
       args:

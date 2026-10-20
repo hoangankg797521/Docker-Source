@@ -1,6 +1,6 @@
 services:
   uptime-kuma:
-    image: uptime-kuma-operations:${UPTIME_KUMA_VERSION:-2.5.6}
+    image: uptime-kuma:${UPTIME_KUMA_VERSION:-2.5.6}
     build:
       context: .
       dockerfile: Dockerfile

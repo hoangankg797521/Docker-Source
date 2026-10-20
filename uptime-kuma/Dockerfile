@@ -3,7 +3,7 @@ FROM louislam/uptime-kuma:${UPTIME_KUMA_VERSION}
 
 LABEL org.opencontainers.image.title="Uptime Kuma Operations"
 LABEL org.opencontainers.image.description="Uptime Kuma 2.5.6 with an Operations UI and custom monitor features"
-LABEL org.opencontainers.image.source="https://github.com/hoangankg797521/Docker-Source/tree/main/uptime-kuma-operations"
+LABEL org.opencontainers.image.source="https://github.com/hoangankg797521/Docker-Source/tree/main/uptime-kuma"
 
 WORKDIR /app
 ENV UPTIME_KUMA_IS_CONTAINER=1

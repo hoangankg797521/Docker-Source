@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+backups/
+data/
+*.dump
+*.tar
+*.tar.gz
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+tests/output/

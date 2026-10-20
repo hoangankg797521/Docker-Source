@@ -1,0 +1,14 @@
+**
+!Dockerfile
+!requirements.lock
+!release.json
+!app/
+!app/**
+!db/
+!db/schema.sql
+!scripts/
+!scripts/bootstrap.py
+!scripts/apply_compatibility.py
+**/__pycache__/**
+**/*.pyc
+**/.DS_Store

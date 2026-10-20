@@ -4,7 +4,7 @@ services:
     build:
       context: .
       target: editor
-    image: homepage-portable-editor:1
+    image: homepage:editor
     user: '0:0'
     entrypoint: [node, /app/init.js]
     volumes:
@@ -15,7 +15,7 @@ services:
     build:
       context: .
       target: editor
-    image: homepage-portable-editor:1
+    image: homepage:editor
     user: '0:0'
     entrypoint: [node, /app/setup.js]
     stdin_open: true
@@ -27,7 +27,7 @@ services:
     build:
       context: .
       target: homepage
-    image: homepage-portable-dashboard:1
+    image: homepage:latest
     restart: unless-stopped
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_ALLOWED_HOSTS:-localhost:3000}
@@ -50,7 +50,7 @@ services:
     build:
       context: .
       target: editor
-    image: homepage-portable-editor:1
+    image: homepage:editor
     restart: unless-stopped
     ports:
       - '${PORT:-3000}:3000'
