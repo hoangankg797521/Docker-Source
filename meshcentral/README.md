@@ -13,7 +13,7 @@ Trang đăng nhập nhận tên tổ chức từ `MESH_BRAND_NAME`; tên này kh
 
 ## Cài ở máy chủ mới
 
-Yêu cầu Docker Engine/Desktop, Docker Compose v2, kết nối Internet để tải image gốc và một DNS name mà máy chủ cùng các agent sẽ dùng.
+Yêu cầu Docker Engine/Desktop, Docker Compose v2, kết nối Internet để tải image gốc và một tên DNS hoặc địa chỉ IP mà trình duyệt và các agent truy cập được.
 
 ```sh
 git clone https://github.com/hoangankg797521/Docker-Source.git
@@ -37,7 +37,9 @@ docker compose ps
 docker compose logs -f meshcentral
 ```
 
-Mở `https://<HOSTNAME>/` và tạo tài khoản quản trị đầu tiên. Đăng ký tài khoản mới sau đó bị tắt theo mặc định. Chỉ đặt `ALLOW_NEW_ACCOUNTS=true` nếu muốn cho phép người dùng tự đăng ký.
+Mở `https://<HOSTNAME>/`, chọn **Tạo tài khoản** và tự đặt tên đăng nhập, mật khẩu. Không có mật khẩu mặc định. Tài khoản đầu tiên tự động trở thành quản trị viên. Nút tạo tài khoản chỉ hiện khi server cho phép, gồm lúc hệ thống chưa có user. Đăng ký tài khoản mới sau đó bị tắt theo mặc định. Chỉ đặt `ALLOW_NEW_ACCOUNTS=true` nếu muốn cho phép người dùng tự đăng ký.
+
+HTTPS trong container dùng cổng **443**, HTTP dùng **80**. Cổng **4433** trong log là Intel AMT, không phải cổng đăng nhập web. Compose mặc định ánh xạ `443:443` và `80:80`.
 
 ## Dữ liệu và cập nhật
 
@@ -61,6 +63,8 @@ node tests/test-ime-keyboard.cjs
 node tests/test-desktop-video-mp4.cjs
 node tests/test-prepare-runtime.cjs
 ```
+
+Bản gói đã được build thành công trên Docker Desktop Intel (`linux/amd64`) và đã xác minh HTTPS cùng luồng tạo admin đầu tiên. Chưa xác minh build trên ARM64.
 
 Build image trước khi triển khai:
 
