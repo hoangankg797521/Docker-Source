@@ -20,7 +20,7 @@ docker compose pull
 docker compose up -d --wait
 ```
 
-Thay endpoint bằng DNS/IP thực; scope bằng các mạng được phép truy cập, phân cách bằng dấu phẩy. Script từ chối ghi đè `.env`/`secrets` hiện có. Tài khoản mới: `wgadmin`; xem mật khẩu trực tiếp trong `secrets/bootstrap.env` trên máy cài, không đưa file này lên Git. Cả hai UI dùng cùng tài khoản wg-easy. Đổi mật khẩu trong wg-easy sau khi đăng nhập; bootstrap chỉ có tác dụng với database trống.
+Thay endpoint bằng DNS/IP thực; scope bằng các mạng được phép truy cập, phân cách bằng dấu phẩy. Script từ chối ghi đè `.env`/`secrets` hiện có. Tài khoản mới: `wgadmin`; xem mật khẩu trực tiếp trong `secrets/bootstrap.env` trên máy cài, không đưa file này lên Git. Cả hai UI dùng cùng tài khoản wg-easy. NOC hiện dùng Basic Auth của wg-easy, không hỗ trợ tài khoản đã bật 2FA; đây là giới hạn của bản custom hiện tại. Đổi mật khẩu trong wg-easy sau khi đăng nhập; bootstrap chỉ có tác dụng với database trống.
 
 Mặc định hai Web chỉ bind `127.0.0.1`. Từ máy quản trị:
 
