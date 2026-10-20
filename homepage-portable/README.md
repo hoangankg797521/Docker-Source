@@ -1,60 +1,67 @@
-# Homepage Portable — giao diện và Visual Editor
+# Homepage Portable — giao diện gốc và Visual Editor
 
-Bộ source độc lập để lưu trên GitHub và build Docker tại máy khác. Giữ giao diện sáng/tối, nút bút Edit, kéo thả thẻ/nhóm, chỉnh số cột và đổi hai tiêu đề. Dịch vụ và bookmark ban đầu trống; không kèm cấu hình, tài khoản, token, log, backup hoặc dữ liệu từ các máy cũ.
+Gói Docker độc lập, lấy CSS/JS và editor từ Homepage gốc v1.13.2. Giữ header, sáng/tối, font/màu/thẻ, tìm dịch vụ, đồng hồ, credit, nút bút, kéo thả, chỉnh 1–8 cột, đổi tiêu đề, backup/restore và thư viện icon Dashboard Icons / MDI / Simple Icons / selfh.st.
 
-Dùng hai container: [Homepage v1.13.2](https://github.com/gethomepage/homepage/releases/tag/v1.13.2) và editor Node 22. Chỉ editor xuất cổng ra ngoài; Homepage kết nối qua mạng Compose. Cần Docker Engine/Desktop với Docker Compose v2 và Internet để tải base image lần đầu. Có thể chạy CPU amd64/arm64 nếu base image hỗ trợ nền tảng đó.
+Không chứa dịch vụ, IP/domain, API key, tài khoản, mật khẩu, lịch sử hay số liệu của hệ thống gốc. Bốn nhóm mẫu, mỗi nhóm bốn thẻ trỏ `https://example.com/`, chỉ dùng để thể hiện bố cục 4 cột. Xóa/đổi tên các thẻ này bằng Edit. CPU/RAM/Disk đọc dữ liệu của nơi cài mới; không mang collector LXC riêng của máy cũ.
 
-## Build và chạy lần đầu
+## Cài mới
 
-Mở terminal trong thư mục này:
+Yêu cầu Docker Engine/Desktop, Docker Compose v2, Git và Internet để tải base image. Tìm kiếm icon và ảnh icon dùng các thư viện online như bản gốc.
 
 ```sh
+git clone https://github.com/hoangankg797521/Docker-Source.git
+cd Docker-Source/homepage-portable
 cp .env.example .env
-# Sửa .env theo địa chỉ thực tế trước khi chạy.
+```
+
+Sửa `.env` theo URL thực tế. Ví dụ IP máy mới `192.168.100.10`:
+
+```dotenv
+PORT=3000
+PUBLIC_ORIGINS=http://192.168.100.10:3000
+HOMEPAGE_ALLOWED_HOSTS=192.168.100.10:3000,localhost:3000
+```
+
+Nếu dùng domain thêm `https://dashboard.example.com` vào `PUBLIC_ORIGINS`, thêm `dashboard.example.com` vào `HOMEPAGE_ALLOWED_HOSTS`. Các phần tử ngăn bằng dấu phẩy; origin không có dấu `/` cuối. Reverse proxy phải trỏ vào cổng editor 3000 và chuyển tiếp `/editor/*`, `/api/*` cùng origin.
+
+```sh
 docker compose build
 docker compose run --rm setup
 docker compose up -d
 docker compose ps
 ```
 
-Lệnh setup yêu cầu nhập mật khẩu mới hai lần, không hiển thị ký tự. Tài khoản Edit là `admin`; chỉ hash scrypt được lưu vào volume riêng. Setup chỉ thêm file cấu hình còn thiếu và từ chối chạy lại nếu đã có tài khoản, tránh ghi đè dữ liệu.
+Setup yêu cầu nhập mật khẩu mới hai lần, tối thiểu 8 ký tự, không hiển thị ký tự. Tài khoản là `admin`. Chỉ hash scrypt được lưu trong volume riêng. Nếu setup chưa thành công, editor sẽ hướng dẫn tạo tài khoản thay vì báo lỗi chung. Setup từ chối ghi đè tài khoản đã tồn tại.
 
-Với cấu hình mặc định, mở http://localhost:3000. Nhấn biểu tượng bút, đăng nhập, tạo nhóm và thêm dịch vụ. Dashboard xem được không cần đăng nhập; các thao tác sửa yêu cầu đăng nhập.
+Mở `http://IP-MAY-MOI:3000`, bấm bút và đăng nhập. Sửa thẻ, tiêu đề hoặc số cột, bấm Save/Done. Thử `docker compose restart` rồi tải lại để kiểm tra dữ liệu được giữ.
 
-## Đổi IP, domain hoặc cổng
+## Cách gói hoạt động
 
-Ví dụ minh họa khi truy cập qua LAN và domain:
+- `Dockerfile`: target Homepage dựa trên `ghcr.io/gethomepage/homepage:v1.13.2`, target editor dựa trên Node 22 Alpine.
+- `init`: chạy một lần trước Homepage, seed các file còn thiếu từ `defaults/`. Không ghi đè cấu hình đã có. Volume Homepage bật `nocopy` để tránh image chèn cấu hình mẫu mặc định.
+- `setup`: tạo tài khoản mới, seed cấu hình khi cần; chỉ lưu hash, không nhúng mật khẩu trong image.
+- `start.js`: xóa cache Homepage dựng sẵn bằng `/api/revalidate` trước khi gateway bắt đầu phục vụ.
+- `homepage`: nội bộ Docker; `editor`: gateway duy nhất xuất cổng 3000.
+- Volume `homepage-portable_config`: YAML, custom CSS/JS và runtime Homepage.
+- Volume `homepage-portable_editor-state`: hash tài khoản, audit và backup của máy mới.
 
-```dotenv
-PORT=3000
-PUBLIC_ORIGINS=http://192.168.1.50:3000,https://dashboard.example.com
-HOMEPAGE_ALLOWED_HOSTS=192.168.1.50:3000,dashboard.example.com,localhost:3000
-```
+Không mount Docker socket mặc định. CPU/RAM/Disk có thể phản ánh phạm vi host/container mà Docker cung cấp, khác phạm vi LXC của hệ thống gốc. Giá trị được lấy thật từ nơi cài mới.
 
-Thay các địa chỉ ví dụ bằng địa chỉ của bạn. `PUBLIC_ORIGINS` phải khớp chính xác URL trình duyệt (protocol + host + port, không có đường dẫn hoặc dấu `/` cuối). `HOMEPAGE_ALLOWED_HOSTS` chỉ chứa host và port, ngăn bằng dấu phẩy. Khi đổi `PORT`, cập nhật cả hai danh sách. Sau khi đổi `.env`, chạy `docker compose up -d`.
-
-Nếu dùng reverse proxy, trỏ proxy vào cổng editor, mặc định 3000; cho phép truy cập cùng origin vào `/editor/*` và `/api/revalidate`. TLS do reverse proxy cung cấp. Không mở riêng cổng Homepage.
-
-## Lưu trên GitHub và triển khai ở nơi khác
-
-Chỉ đưa nội dung thư mục source này vào repository. `.env` và các thư mục chứa dữ liệu/secret đã được ignore. Dockerfile dùng COPY theo danh sách cụ thể và `.dockerignore` giới hạn build context. Không đưa file `auth.json`, export cấu hình từ máy cũ hoặc bản backup vào repo.
-
-Máy mới: clone repository, làm các bước build/setup/up phía trên. Mỗi máy có volume riêng và đặt mật khẩu riêng. Không cần sao chép dữ liệu từ máy đang chạy.
-
-## Dữ liệu và vận hành
-
-- Volume `homepage-portable_config`: YAML, custom CSS/JS và dữ liệu Homepage tạo khi chạy.
-- Volume `homepage-portable_editor-state`: hash tài khoản, audit, backup khi lưu cấu hình.
-- `docker compose logs --tail=100`: xem tình trạng container.
-- `docker compose down`: dừng và bỏ container, vẫn giữ volume.
-- Build rồi `docker compose up -d` để cập nhật mã editor. File mặc định chỉ được seed khi setup, không ghi đè tùy chỉnh đã lưu.
-
-Đây là bản khởi tạo sạch, không phải công cụ di chuyển dữ liệu. Widget liên kết hệ thống khác phải được cấu hình lại bằng thông tin của nơi mới. Không mount Docker socket mặc định. Muốn quay lại hệ thống hiện tại chỉ cần tiếp tục dùng hệ thống đó; gói này không thay đổi các máy đang chạy.
-
-## Kiểm thử source
+## Vận hành và bảo toàn dữ liệu
 
 ```sh
-node --test editor/test.js
+docker compose logs --tail=100
+docker compose down
 ```
 
-Test dùng fixture giả và thư mục tạm; không truy cập server hiện tại. Build/start Docker phải được xác minh trên máy có Docker. Bản đóng gói này đã kiểm tra source editor và YAML; chưa chạy container thực tế trên máy tạo gói vì không có Docker CLI.
+`down` không xóa volume. Khi cập nhật source, build rồi chạy `up -d`; init không ghi đè dữ liệu đang có. Bản này dành cho cài mới sạch. Nếu cài đè bản đóng gói cũ, volume cũ vẫn giữ CSS/JS cũ; cần sao lưu và thực hiện migration có chủ đích, không xóa volume chứa dữ liệu cần giữ.
+
+`.env`, runtime, backup và secret không được đưa lên GitHub. Dockerfile dùng COPY theo danh sách cụ thể; `.dockerignore` giới hạn build context.
+
+## Kiểm thử
+
+```sh
+node --test editor/test.js package-test.js
+```
+
+Kiểm tra editor: auth, Origin/CSRF, bảo toàn widget/trường nâng cao, conflict, save/restore/rollback, icon catalog và cache. Kiểm tra đóng gói: seed đủ asset gốc, bố cục 4 cột, chỉ URL mẫu, chạy init lại không ghi đè sửa đổi. Test dùng fixture giả, không truy cập hệ thống gốc.

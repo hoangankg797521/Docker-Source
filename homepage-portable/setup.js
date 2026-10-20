@@ -4,7 +4,6 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const config = process.env.CONFIG_DIR || '/config';
 const state = process.env.STATE_DIR || '/state';
-const defaults = process.env.DEFAULTS_DIR || '/defaults';
 function password(label) {
   return new Promise((resolve, reject) => {
     if (!process.stdin.isTTY) return reject(Error('Cần terminal tương tác để đặt mật khẩu.'));
@@ -27,18 +26,12 @@ async function main() {
   for (const dir of [config, state]) fs.mkdirSync(dir, { recursive: true });
   const auth = path.join(state, 'auth.json');
   if (fs.existsSync(auth)) throw Error('Đã có tài khoản. Setup dừng để giữ nguyên dữ liệu.');
-  const a = await password('Mật khẩu mới cho admin (tối thiểu 12 ký tự): ');
-  if (a.length < 12) throw Error('Mật khẩu cần ít nhất 12 ký tự.');
+  const a = await password('Mật khẩu mới cho admin (tối thiểu 8 ký tự): ');
+  if (a.length < 8) throw Error('Mật khẩu cần ít nhất 8 ký tự.');
   if (a !== await password('Nhập lại mật khẩu: ')) throw Error('Mật khẩu không khớp.');
   const salt = crypto.randomBytes(32).toString('hex');
   const credentials = { username: 'admin', salt, hash: crypto.scryptSync(a, salt, 64).toString('hex') };
-  for (const file of fs.readdirSync(defaults)) {
-    const target = path.join(config, file);
-    if (!fs.existsSync(target)) {
-      fs.copyFileSync(path.join(defaults, file), target, fs.constants.COPYFILE_EXCL);
-      fs.chmodSync(target, 0o644); fs.chownSync(target, 1000, 1000);
-    }
-  }
+  require('./init').seed();
   fs.writeFileSync(auth, JSON.stringify(credentials), { flag: 'wx', mode: 0o600 });
   fs.chownSync(auth, 1000, 1000);
   for (const dir of [config, state]) { fs.chownSync(dir, 1000, 1000); fs.chmodSync(dir, dir === state ? 0o700 : 0o755); }

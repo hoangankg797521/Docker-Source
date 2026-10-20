@@ -1,4 +1,4 @@
-/* Portable compact Homepage portal. */
+/* Portable original Homepage presentation. */
 body, #page_wrapper { background: #edf2f7 !important; color: #172b46; }
 #information-widgets { background: #fff !important; border: 1px solid #cbd8e6; border-top: 3px solid #0284c7; border-radius: 12px; padding: 16px 20px; margin-bottom: 0; box-shadow: 0 2px 8px #172b4608; }
 #widgets-wrap { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 4px 24px; align-items: center; }
@@ -280,7 +280,17 @@ html:not([data-vh-theme="light"]) a:focus-visible,
 html:not([data-vh-theme="light"]) button:focus-visible,
 html:not([data-vh-theme="light"]) input:focus-visible { outline-color: #a1b3c2; }
 
-/* Keep the home server's existing global search as a separate full-width row. */
-#information-widgets-right > .information-widget-search {grid-column:1 / -1;grid-row:4;width:100%;margin:0;min-width:0;}
-#information-widgets-right > .information-widget-search input {border:1px solid #cbd8e6;border-radius:10px;min-height:38px;}
-@media(max-width:1023px){#information-widgets-right > .information-widget-search{grid-column:1;grid-row:7;}}
+/* Keep monitoring descriptions to one line so this row matches other service rows. */
+@media (min-width:768px) {
+ #layout-groups > .services-group:first-child .service-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+}
+
+/* Match the theme toggle to Homepage's edit control. */
+#vh-theme-toggle { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; font-size: 1rem; }
+
+/* Match the visible Homepage edit button dimensions from the dashboard. */
+#vh-theme-toggle { box-sizing: border-box; width: 28px; height: 28px; min-width: 28px; min-height: 28px; max-width: 28px; max-height: 28px; padding: 0; line-height: 1; font-size: 1rem; }

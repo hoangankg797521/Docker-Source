@@ -1,5 +1,15 @@
 name: homepage-portable
 services:
+  init:
+    build:
+      context: .
+      target: editor
+    image: homepage-portable-editor:1
+    user: '0:0'
+    entrypoint: [node, /app/init.js]
+    volumes:
+      - config:/config
+      - editor-state:/state
   setup:
     profiles: [setup]
     build:
@@ -22,7 +32,14 @@ services:
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_ALLOWED_HOSTS:-localhost:3000}
     volumes:
-      - config:/app/config
+      - type: volume
+        source: config
+        target: /app/config
+        volume:
+          nocopy: true
+    depends_on:
+      init:
+        condition: service_completed_successfully
     healthcheck:
       test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/healthcheck').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 15s

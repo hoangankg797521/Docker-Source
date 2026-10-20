@@ -1,5 +1,19 @@
 title: My Homepage
-theme: dark
+theme: light
 color: slate
-headerStyle: clean
-layout: {}
+headerStyle: boxed
+useEqualHeights: true
+language: vi
+layout:
+  Nhóm mẫu 1:
+    style: row
+    columns: 4
+  Nhóm mẫu 2:
+    style: row
+    columns: 4
+  Nhóm mẫu 3:
+    style: row
+    columns: 4
+  Nhóm mẫu 4:
+    style: row
+    columns: 4

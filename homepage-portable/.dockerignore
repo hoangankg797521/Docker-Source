@@ -1,6 +1,8 @@
 **
 !Dockerfile
 !setup.js
+!init.js
+!start.js
 !editor/
 !editor/server.js
 !editor/package.json
