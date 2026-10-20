@@ -1,0 +1,29 @@
+services:
+  meshcentral:
+    image: meshcentral-custom:${IMAGE_TAG:-1.2.6}
+    build:
+      context: .
+      args:
+        MESHCENTRAL_VERSION: ${MESHCENTRAL_VERSION:-1.2.6}
+    container_name: meshcentral
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
+      MESH_BRAND_NAME: "${MESH_BRAND_NAME:-Your Organization}"
+      HOSTNAME: ${HOSTNAME:?Set HOSTNAME in .env to the DNS name used by agents and browsers}
+      ALLOW_NEW_ACCOUNTS: ${ALLOW_NEW_ACCOUNTS:-false}
+      DYNAMIC_CONFIG: "false"
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - meshcentral-data:/opt/meshcentral/meshcentral-data
+      - meshcentral-files:/opt/meshcentral/meshcentral-files
+      - meshcentral-web:/opt/meshcentral/meshcentral-web
+      - meshcentral-backups:/opt/meshcentral/meshcentral-backups
+
+volumes:
+  meshcentral-data:
+  meshcentral-files:
+  meshcentral-web:
+  meshcentral-backups:

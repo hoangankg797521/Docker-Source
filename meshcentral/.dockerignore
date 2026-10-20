@@ -1,0 +1,9 @@
+**
+!Dockerfile
+!docker-entrypoint.sh
+!custom/
+!custom/meshuser.js
+!custom/prepare-runtime.js
+!custom/views/
+!custom/views/default.handlebars
+!custom/views/login2.handlebars
