@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.secrets/
+config/
+state/
+editor-state/
+backups/
+*.log
+*.zip
+.DS_Store
+auth.json

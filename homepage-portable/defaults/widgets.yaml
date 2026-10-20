@@ -1,0 +1,15 @@
+- greeting:
+    text: My Homepage
+    text_size: xl
+- greeting:
+    text: Personal Dashboard
+    text_size: sm
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+- datetime:
+    text_size: sm
+    format:
+      dateStyle: medium
+      timeStyle: short

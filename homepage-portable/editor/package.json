@@ -1,0 +1,8 @@
+{
+  "name": "homepage-visual-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Authenticated visual editor and same-origin gateway for the existing Homepage dashboard",
+  "engines": {"node": ">=22"},
+  "scripts": {"start": "node server.js", "test": "node --test test.js"}
+}

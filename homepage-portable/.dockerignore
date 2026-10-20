@@ -1,0 +1,12 @@
+**
+!Dockerfile
+!setup.js
+!editor/
+!editor/server.js
+!editor/package.json
+!editor/public/
+!editor/public/**
+!editor/vendor/
+!editor/vendor/**
+!defaults/
+!defaults/**

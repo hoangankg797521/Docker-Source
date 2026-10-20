@@ -1,0 +1,60 @@
+name: homepage-portable
+services:
+  setup:
+    profiles: [setup]
+    build:
+      context: .
+      target: editor
+    image: homepage-portable-editor:1
+    user: '0:0'
+    entrypoint: [node, /app/setup.js]
+    stdin_open: true
+    tty: true
+    volumes:
+      - config:/config
+      - editor-state:/state
+  homepage:
+    build:
+      context: .
+      target: homepage
+    image: homepage-portable-dashboard:1
+    restart: unless-stopped
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_ALLOWED_HOSTS:-localhost:3000}
+    volumes:
+      - config:/app/config
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/healthcheck').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  editor:
+    build:
+      context: .
+      target: editor
+    image: homepage-portable-editor:1
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      UPSTREAM: http://homepage:3000
+      PUBLIC_ORIGINS: ${PUBLIC_ORIGINS:-http://localhost:3000}
+    volumes:
+      - config:/config
+      - editor-state:/state
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/editor/editor.js').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      homepage:
+        condition: service_healthy
+volumes:
+  config:
+  editor-state:
