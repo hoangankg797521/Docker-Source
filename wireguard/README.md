@@ -57,7 +57,7 @@ docker save -o wireguard-custom-1.0.0-amd64.tar \
 
 Ở nơi mới, copy thư mục `wireguard` và tar, chạy configure với thông tin nơi mới, `docker load -i wireguard-custom-1.0.0-amd64.tar`, rồi `docker compose up -d --pull never --wait`. Không copy secrets hoặc volumes của nơi cũ nếu muốn cài mới. Image chứa mã ứng dụng; compose và secrets được cấu hình lúc chạy. Không lưu image tar lớn trực tiếp trong Git; dùng GHCR hoặc GitHub Release assets.
 
-Workflow `WireGuard custom images` build/push ba image khi thư mục này thay đổi trên `main`. Tag `sha-<commit>` truy vết mỗi bản; ưu tiên pin digest cho production. Không chạy workflow upstream đi kèm source: chỉ workflow của repo Docker-Source được dùng.
+Repository không còn workflow tự động build/publish image. Các image `1.0.0` đã xuất bản trên GHCR vẫn có thể dùng; khi thay đổi source, build thủ công theo hướng dẫn phía trên và chọn tag mới. Ưu tiên pin digest cho production.
 
 ## Dữ liệu, nâng cấp và rollback
 
