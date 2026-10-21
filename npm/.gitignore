@@ -1,0 +1,10 @@
+data/
+letsencrypt/
+backups/
+.env
+*.sqlite*
+*.pem
+*.key
+npm-state-*
+npm-image-*
+restore-check/

@@ -1,0 +1,4 @@
+*
+!Dockerfile
+!assets/
+!assets/runtime-overlay.tar.gz

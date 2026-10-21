@@ -4,6 +4,7 @@ Các gói Docker độc lập; mỗi thư mục có hướng dẫn, cấu hình 
 
 | Thư mục | Image build local |
 |---|---|
+| [npm](npm/) | `local/npm:2.15.1-ddns.2` (Nginx Proxy Manager + DDNS) |
 | [homepage](homepage/) | `homepage:latest`, `homepage:editor` |
 | [uptime-kuma](uptime-kuma/) | `uptime-kuma:2.5.6` |
 | [meshcentral](meshcentral/) | `meshcentral:1.2.6` |
